@@ -20,15 +20,19 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?= $config["url"] ?>">Torrents</a></li>
-                        <li><a href="<?= $config["url"] ?>upload">Upload</a></li>
+                        <li <?php if($page=="home") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>home.php"><?= glyph("arrow-right-arrow-left", "Torrents") ?> Torrents</a></li>
+                        <li <?php if($page=="groups") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>groups.php"><?= glyph("users", "Groups") ?> Groups</a></li>
+                        <li <?php if($page=="upload") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>upload.php"><?= glyph("upload", "Upload") ?> Upload</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Not logged in! <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= glyph("user", "Account") ?> <?= $user["username"] ?><span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?= $config["url"] ?>login">Login</a></li>
-                                <li><a href="<?= $config["url"] ?>singup">Signup</a></li>
+                                <li <?php if($page=="my-profile") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>profile.php?name=<?= $user["username"] ?>"><?= glyph("id-card", "My Profile") ?> My Profile</a></li>
+                                <li <?php if($page=="account") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>account.php?tab=settings"><?= glyph("user-gear", "Account") ?> Account</a></li>
+                                <li <?php if($page=="my-torrents") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>account.php?tab=torrents.php"><?= glyph("paste", "My Torrents") ?> My Torrents</a></li>
+                                <li <?php if($page=="my-invites") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>account.php?tab=invites"><?= glyph("code-fork", "My Invites") ?> My Invites</a></li>
+                                <li <?php if($page=="logout") echo 'class="active"'; ?>><a href="?logout"><?= glyph("arrow-right-from-bracket", "Logout") ?> Logout</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -36,7 +40,7 @@
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Quicksearch Torrent">
                         </div>
-                        <button type="submit" class="btn btn-default">Search</button>
+                        <button type="submit" class="btn btn-default"><?= glyph("magnifying-glass", "Search") ?> Search</button>
                     </form>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
