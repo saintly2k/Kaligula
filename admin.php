@@ -90,7 +90,13 @@ if($tab=="stats") {
 }
 
 if($tab=="upgrade") {
-    // Upgrade system here?
+    $lversion = file_get_contents("https://cdn.henai.eu/Kaligula/version.txt");
+    
+    if(isset($_GET["action"]) && $_GET["action"]=="do") {
+        // Perform update
+        
+        header("Location: ?tab=update");
+    }
 }
 
 if(isset($_GET["error"]) && $_GET["error"]==true) {
@@ -308,8 +314,13 @@ include("parts/header.php");
 
         <?php } elseif($tab=="upgrade") { ?>
 
-        TO DO!
+        <p>Current: <span class="label label-success"><?= $version ?></span></p>
+        <p>Latest: <?php if($version!=$lversion) { echo '<span class="label label-danger">'; } else { echo '<span class="label label-success">'; } ?><?= $lversion ?><?= '</span>' ?></p>
 
+        <?php if($version!=$lversion) { ?>
+        <p><a href="?tab=upgrade&action=do">Perform update!</a></p>
+        <?php } ?>
+        <p>Everything's fine!</p>
         <?php } else { ?>
 
         <p>Hmm... whatever you tried searching for, is not to be found.</p>

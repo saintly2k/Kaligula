@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 19. Jun 2022 um 01:18
+-- Erstellungszeit: 21. Jun 2022 um 19:07
 -- Server-Version: 10.4.22-MariaDB
 -- PHP-Version: 7.4.27
 
@@ -24,22 +24,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `categories`
+--
+
+CREATE TABLE `categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `image` varchar(100) NOT NULL DEFAULT 'default.png',
+  `added` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `config`
 --
 
 CREATE TABLE `config` (
   `title` varchar(20) NOT NULL,
   `slogan` varchar(100) NOT NULL,
+  `registration` tinyint(1) NOT NULL DEFAULT 1,
+  `fontawesome` varchar(20) NOT NULL,
   `cookie` varchar(20) NOT NULL,
-  `url` varchar(100) NOT NULL
+  `url` varchar(100) NOT NULL,
+  `announce` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `config`
---
-
-INSERT INTO `config` (`title`, `slogan`, `cookie`, `url`) VALUES
-('Kaligula', 'Shadow and Light!', 'kaligula', 'http://localhost/Kaligula/');
 
 -- --------------------------------------------------------
 
@@ -55,6 +64,24 @@ CREATE TABLE `invites` (
   `created` datetime NOT NULL DEFAULT current_timestamp(),
   `used` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `peers`
+--
+
+CREATE TABLE `peers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `ipAddress` varchar(80) NOT NULL,
+  `port` int(11) NOT NULL,
+  `peerId` varchar(40) NOT NULL,
+  `infoHash` varchar(40) NOT NULL,
+  `key` varchar(40) NOT NULL,
+  `userAgent` varchar(80) NOT NULL,
+  `expire` int(11) NOT NULL,
+  `isSeed` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -78,6 +105,7 @@ CREATE TABLE `torrents` (
   `slug` text NOT NULL,
   `name` varchar(250) NOT NULL,
   `link` text NOT NULL,
+  `infohash` text NOT NULL,
   `file` text NOT NULL,
   `description` text DEFAULT NULL,
   `user` int(11) NOT NULL,
@@ -99,7 +127,11 @@ CREATE TABLE `user` (
   `password` text NOT NULL,
   `image` text NOT NULL DEFAULT 'https://cdn.henai.eu/assets/images/avatar.png',
   `country` int(11) DEFAULT NULL,
-  `level` int(11) NOT NULL DEFAULT 3,
+  `default_uplang` varchar(2) NOT NULL DEFAULT 'en',
+  `website` varchar(200) DEFAULT NULL,
+  `about` text DEFAULT NULL,
+  `level` int(11) NOT NULL DEFAULT 4,
+  `theme` int(11) NOT NULL DEFAULT 3,
   `banned` tinyint(1) NOT NULL DEFAULT 0,
   `banned_reason` varchar(200) DEFAULT NULL,
   `joined` datetime NOT NULL DEFAULT current_timestamp()
@@ -108,6 +140,12 @@ CREATE TABLE `user` (
 --
 -- Indizes der exportierten Tabellen
 --
+
+--
+-- Indizes für die Tabelle `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `config`
@@ -122,6 +160,14 @@ ALTER TABLE `invites`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indizes für die Tabelle `peers`
+--
+ALTER TABLE `peers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `infoHash` (`infoHash`),
+  ADD KEY `peerId` (`peerId`);
+
+--
 -- Indizes für die Tabelle `torrents`
 --
 ALTER TABLE `torrents`
@@ -131,17 +177,30 @@ ALTER TABLE `torrents`
 -- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
 --
 
 --
+-- AUTO_INCREMENT für Tabelle `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT für Tabelle `invites`
 --
 ALTER TABLE `invites`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT für Tabelle `peers`
+--
+ALTER TABLE `peers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `torrents`

@@ -10,6 +10,13 @@ $page = "";
 $version = file_get_contents(".installed");
 
 require("core/db.php");
+
+if(!defined('__DB_SERVER')) { define('__DB_SERVER', $slave["host"]); }
+if(!defined('__DB_USERNAME')) { define('__DB_USERNAME', $slave["user"]); }
+if(!defined('__DB_PASSWORD')) { define('__DB_PASSWORD', $slave["pass"]); }
+if(!defined('__DB_DATABASE')) { define('__DB_DATABASE', $slave["table"]); }
+if(!defined('__DB_TABLE')) { define('__DB_TABLE', 'peers'); }
+
 require("core/conn.php");
 require("core/funky.php");
 require("core/account.php");
