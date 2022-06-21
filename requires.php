@@ -2,7 +2,12 @@
 
 session_start();
 
+if(!file_exists(".installed")) {
+    header("Location: install.php");
+}
+
 $page = "";
+$version = file_get_contents(".installed");
 
 require("core/db.php");
 require("core/conn.php");
