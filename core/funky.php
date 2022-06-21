@@ -6,13 +6,18 @@ function glyph($glyph, $title, $anim = "") {
     return "<span class='fa-solid fa-".$glyph." fa-".$anim."' aria-hidden='true' title='".$title."'></span>";
 }
 
-function check($type, $page) {
+function check($type, $val) {
     require("db.php");
     require("conn.php");
     require("account.php");
     if($type=="logged") {
-        if($loggedin==false && ($page!="login" && $page!="signup")) {
+        if($loggedin==false && ($val!="login" && $val!="signup")) {
             header("Location: login.php");
+        }
+    }
+    if($type=="admin") {
+        if($val!=1) {
+            header("Location: home.php");
         }
     }
 }

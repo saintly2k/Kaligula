@@ -2,6 +2,3 @@ DirectoryIndex home.php
 Options +FollowSymLinks
 RewriteEngine On
 Options -Indexes
-
-# Main Pages
-RewriteRule ^login/?$ ./render/public/login.req.php

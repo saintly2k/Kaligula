@@ -23,6 +23,9 @@
                         <li <?php if($page=="home") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>home.php"><?= glyph("arrow-right-arrow-left", "Torrents") ?> Torrents</a></li>
                         <li <?php if($page=="groups") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>groups.php"><?= glyph("users", "Groups") ?> Groups</a></li>
                         <li <?php if($page=="upload") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>upload.php"><?= glyph("upload", "Upload") ?> Upload</a></li>
+                        <?php if($user["level"]==1) { ?>
+                        <li <?php if($page=="admin") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>admin.php"><?= glyph("hammer", "Admin") ?> Admin</a></li>
+                        <?php } ?>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">

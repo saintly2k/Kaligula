@@ -95,6 +95,7 @@ include("parts/header.php");
                                 <strong><?= glyph("triangle-exclamation", "Error", "fade") ?></strong> <?= $error_msg ?>
                             </div>
                             <?php } ?>
+                            <?php if($config["registration"]==true) { ?>
                             <form accept-charset="UTF-8" role="form" method="post" name="signup">
                                 <fieldset>
                                     <div class="form-group">
@@ -112,6 +113,9 @@ include("parts/header.php");
                                     <button class="btn btn-lg btn-success btn-block" type="submit" name="signup"><?= glyph("user-plus", "Signup", "flip") ?> Signup</button>
                                 </fieldset>
                             </form>
+                            <?php } else { ?>
+                            <p style="color:red">Registrations are disabled at the moment. Please check back later.</p>
+                            <?php } ?>
                             <hr>
                             <center>
                                 <p><a href="<?= $config["url"] ?>login.php">Already have an account?</a></p>
