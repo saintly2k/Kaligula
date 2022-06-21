@@ -49,6 +49,38 @@ if($tab=="categories") {
         
         header("Location: ?tab=categories");
     }
+    
+    if(isset($_POST["edit_cat"])) {
+        $cid = clean(mysqli_real_escape_string($conn, $_POST["id"]));
+        $cimage = clean(mysqli_real_escape_string($conn, $_POST["image"]));
+        $cname = clean(mysqli_real_escape_string($conn, $_POST["name"]));
+        $cname2 = clean(mysqli_real_escape_string($conn, $_POST["name2"]));
+        
+        if($cname==$cname2) {
+            $check = $conn->query("SELECT * FROM `categories` WHERE `id`='99999' LIMIT 1");
+        } else {
+            $check = $conn->query("SELECT * FROM `categories` WHERE `name`='$cname' LIMIT 1");
+        }
+        
+        if(mysqli_num_rows($check)!=1) {
+            $sql = "UPDATE `categories` SET `name`='$cname', `image`='$cimage' WHERE `id`='$cid'";
+            if(mysqli_query($conn, $sql)) {} else { $error = true; $error_msg = "Error editing category: " . mysqli_error($conn); }
+        } else {
+            $error = true;
+            $error_msg = "A category with this name already exists.";
+        }
+        
+        header("Location: ?tab=categories&error=$error&msg=$error_msg");
+    }
+    
+    if(isset($_POST["del_cat"])) {
+        $cid = clean(mysqli_real_escape_string($conn, $_POST["id"]));
+        
+        $sql = "DELETE FROM `categories` WHERE `id`='$cid'";
+        if(mysqli_query($conn, $sql)) {} else { $error = true; $error_msg = "Error deleting category: " . mysqli_error($conn); }
+        
+        header("Location: ?tab=categories&error=$error&msg=$error_msg");
+    }
 }
 
 if($tab=="stats") {
@@ -59,6 +91,11 @@ if($tab=="stats") {
 
 if($tab=="upgrade") {
     // Upgrade system here?
+}
+
+if(isset($_GET["error"]) && $_GET["error"]==true) {
+    $error = true;
+    $error_msg = clean(mysqli_real_escape_string($conn, $_GET["msg"]));
 }
 
 include("parts/header.php");
@@ -195,24 +232,40 @@ include("parts/header.php");
                         <tbody>
                             <?php foreach($categories as $c) { ?>
                             <tr id="normalCon-<?= $c["id"] ?>" style="display: table-row">
-                                <td><?= $c["id"] ?></td>
-                                <td><img src="assets/cats/<?= $c["image"] ?>" style="height: 100%; max-width: 100%" alt="Invalid"></td>
-                                <td><?= $c["image"] ?></td>
-                                <td><?= $c["name"] ?></td>
-                                <td>
-                                    <button style="width: 49%" type="button" onclick="showEditCon(<?= $c["id"] ?>);" class="btn btn-success"><?= glyph("pencil", "Edit Category") ?></button>
-                                    <button style="width: 49%" type="button" onclick="showDelCon(<?= $c["id"] ?>);" class="btn btn-danger"><?= glyph("trash", "Delete Category") ?></button>
-                                </td>
-                            </tr>
-                            <tr id="editCon-<?= $c["id"] ?>" style="display: none">
-                                <form name="edit_cat" method="post">
+                                <form class="form-inline" name="del_cat" method="post">
                                     <td><?= $c["id"] ?></td>
+                                    <input type="number" readonly style="display: none" name="id" value="<?= $c["id"] ?>">
                                     <td><img src="assets/cats/<?= $c["image"] ?>" style="height: 100%; max-width: 100%" alt="Invalid"></td>
                                     <td><?= $c["image"] ?></td>
                                     <td><?= $c["name"] ?></td>
                                     <td>
-                                        <button style="width: 49%" type="submit" class="btn btn-success"><?= glyph("check", "Make Changes") ?></button>
-                                        <button style="width: 49%" type="button" onclick="hideEditCon(<?= $c["id"] ?>);" class="btn btn-danger"><?= glyph("xmark", "Dismiss Changes") ?></button>
+                                        <button style="width: 49%; display: inline" type="button" id="btnxd1-<?= $c["id"] ?>" onclick="showEditCon(<?= $c["id"] ?>);" class="btn btn-success btn-sm"><?= glyph("pencil", "Edit Category") ?></button>
+                                        <button style="width: 49%; display: inline" type="button" id="btnxd2-<?= $c["id"] ?>" onclick="showDelBtn(<?= $c["id"] ?>);" class="btn btn-danger btn-sm"><?= glyph("circle-minus", "Delete Category") ?></button>
+                                        <button style="width: 49%; display: none" type="submit" name="del_cat" id="btnxd3-<?= $c["id"] ?>" class="btn btn-danger btn-sm"><?= glyph("trash-can", "Delete Category") ?></button>
+                                        <button style="width: 49%; display: none" type="button" id="btnxd4-<?= $c["id"] ?>" onclick="hideDelBtn(<?= $c["id"] ?>);" class="btn btn-success btn-sm"><?= glyph("xmark", "Cancel") ?></button>
+                                    </td>
+                                </form>
+                            </tr>
+                            <tr id="editCon-<?= $c["id"] ?>" style="display: none">
+                                <form class="form-inline" name="edit_cat" method="post">
+                                    <td><?= $c["id"] ?></td>
+                                    <input type="number" readonly style="display: none" name="id" value="<?= $c["id"] ?>">
+                                    <input type="text" readonly style="display: none" name="name2" value="<?= $c["name"] ?>">
+                                    <td><img src="assets/cats/<?= $c["image"] ?>" style="height: 100%; max-width: 100%" alt="Invalid"></td>
+                                    <td>
+                                        <div class="input-group">
+                                            <div class="input-group-addon" style="padding: 11px">assets/cats/</div>
+                                            <input required type="text" style="margin-bottom: -15px" name="image" class="form-control" value="<?= $c["image"] ?>" placeholder="yourfile.png">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input required type="text" style="margin-bottom: -15px" class="form-control" name="name" id="name" value="<?= $c["name"] ?>" placeholder="Name of category">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button style="width: 49%" type="submit" name="edit_cat" class="btn btn-success btn-sm"><?= glyph("check", "Make Changes") ?></button>
+                                        <button style="width: 49%" type="button" onclick="hideEditCon(<?= $c["id"] ?>);" class="btn btn-danger btn-sm"><?= glyph("xmark", "Dismiss Changes") ?></button>
                                     </td>
                                 </form>
                             </tr>
