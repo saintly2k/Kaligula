@@ -21,6 +21,15 @@ require("core/conn.php");
 require("core/funky.php");
 require("core/account.php");
 
+if($loggedin==true) {
+    if($user["banned"]==true && !isset($_SESSION["ya"])) {
+        header("Location: login.php");
+        $error = true;
+        $error_msg = "You're banned. Reason: ".$user["banned_reason"];
+        $_SESSION["ya"] = "ya";
+    }
+}
+
 if(isset($_GET["logout"])) {
     // Removing token from Database and destroy entire session and so on
     $uid = $user["id"];

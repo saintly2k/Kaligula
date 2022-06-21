@@ -28,9 +28,11 @@ if(!empty($profile["id"])) {
             <?= $profile["username"] ?>
             <?php if($profile["banned"]==true) { ?>
             <span class="label label-danger">Banned</span>
+            <small>Reason: <?= $profile["banned_reason"] ?>; Date: <?= $profile["banned_at"] ?></small>
             <?php } ?>
         </h3>
         <p>
+            <?= glyph("graduation-cap", "User Level") ?> <?= convert_level("user", $profile["level"]) ?><br>
             <?= glyph("calendar-day", "Joined at") ?> <?= $profile["joined"] ?><br>
             <?= glyph("code-fork", "Invited x Users") ?> <?= count_it("invites", $profile["id"]) ?><br>
             <?= glyph("file-arrow-up", "Uploaded x Torrents") ?> <?= count_it("torrents", $profile["id"]) ?>

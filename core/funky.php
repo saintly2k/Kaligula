@@ -72,6 +72,16 @@ function bbconvert($text) {
 	return preg_replace($find,$replace,$text);
 }
 
+function convert_level($type, $id) {
+    if($type=="user") {
+        if($id==1) $lv = "Admin";
+        if($id==2) $lv = "Mod";
+        if($id==3) $lv = "Trusted";
+        if($id==4) $lv = "Member";
+    }
+    return $lv;
+}
+
 function count_it($type, $id) {
     require("db.php");
     require("conn.php");
