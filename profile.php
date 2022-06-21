@@ -24,9 +24,15 @@ if(!empty($profile["id"])) {
         <img src="<?= $profile["image"] ?>" style="width: 100%; max-height: 1000px">
     </div>
     <div class="col-sm-10">
-        <h3><?= $profile["username"] ?></h3>
+        <h3>
+            <?= $profile["username"] ?>
+            <?php if($profile["banned"]==true) { ?>
+            <span class="label label-danger">Banned</span>
+            <?php } ?>
+        </h3>
         <p>
             <?= glyph("calendar-day", "Joined at") ?> <?= $profile["joined"] ?><br>
+            <?= glyph("code-fork", "Invited x Users") ?> <?= count_it("invites", $profile["id"]) ?><br>
             <?= glyph("file-arrow-up", "Uploaded x Torrents") ?> <?= count_it("torrents", $profile["id"]) ?>
         </p>
     </div>

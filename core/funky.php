@@ -80,6 +80,10 @@ function count_it($type, $id) {
         $c = $conn->query("SELECT COUNT(*) AS total FROM `torrents` WHERE `user`='$id'")->fetch_assoc();
         return $c["total"];
     }
+    if($type=="invites") {
+        $c = $conn->query("SELECT COUNT(*) AS total FROM `invites` WHERE `used`='0'")->fetch_assoc();
+        return $c["total"];
+    }
 }
 
 ?>

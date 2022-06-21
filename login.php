@@ -23,12 +23,18 @@ if(isset($_POST["username"]) && isset($_POST["password"])) {
                 // Yay, user exists & passowrd matches!
                 $user = $conn->query("SELECT * FROM `user` WHERE `username`='$username' LIMIT 1");
                 $user = mysqli_fetch_assoc($user);
-                $uid = $user["id"];
-                $token = rand();
-                $token = md5($token);
-                setcookie("".$config["cookie"]."_session", $token, time()+(86400*30), "/");
-                $conn->query("INSERT INTO `sessions`(`user-id`,`token`) VALUES('$uid','$token')");
-                header("Location: home.php");
+                if($user["banned"]==false) {
+                    $uid = $user["id"];
+                    $token = rand();
+                    $token = md5($token);
+                    setcookie("".$config["cookie"]."_session", $token, time()+(86400*30), "/");
+                    $conn->query("INSERT INTO `sessions`(`user-id`,`token`) VALUES('$uid','$token')");
+                    header("Location: home.php");
+                } else {
+                    // LOLUMAD BANNED ROFL
+                    $error = true;
+                    $error_msg = "You're banned. Reason: ".$user["banned_reason"];
+                }
             } else {
                 // Ewww error
                 $error = true;
