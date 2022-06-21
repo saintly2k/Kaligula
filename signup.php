@@ -47,7 +47,7 @@ if(isset($_POST["signup"])) {
     if($error==false) {
         // Everything is right!
         $password = password_hash($password1, PASSWORD_BCRYPT);
-        $conn->query("UPDATE `invites` SET `used`='$date' WHERE `token`='$invite'");
+        $conn->query("UPDATE `invites` SET `used`='1' WHERE `token`='$invite'");
         $conn->query("INSERT INTO `user`(`username`,`password`) VALUES('$username','$password')");
         header("Location: ./login.php");
     }
