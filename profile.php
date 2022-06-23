@@ -8,6 +8,11 @@ check("logged", "profile");
 
 $un = clean(mysqli_real_escape_string($conn, $_GET["name"]));
 $profile = $conn->query("SELECT * FROM `user` WHERE `username`='$un'")->fetch_assoc();
+$torrents = $conn->query("SELECT * FROM `torrents` WHERE `user`='".$profile["id"]."' ORDER BY `id` DESC");
+
+if($un==$user["username"]) {
+    $page = "my-profile";
+}
 
 include("parts/header.php");
 
@@ -37,6 +42,41 @@ if(!empty($profile["id"])) {
             <?= glyph("code-fork", "Invited x Users") ?> <?= count_it("invites", $profile["id"]) ?><br>
             <?= glyph("file-arrow-up", "Uploaded x Torrents") ?> <?= count_it("torrents", $profile["id"]) ?>
         </p>
+        <?php if($user["level"]==1 || $user["level"]==2) { ?>
+        Admin / Mod tools here
+        <?php } ?>
+    </div>
+    <div class="col-sm-12">
+        <hr>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 1%"><?= glyph("folder-open", "Category") ?></th>
+                    <th style="width: 1%"><?= glyph("globe", "Language") ?></th>
+                    <th style="width: 5%"></th>
+                    <th style="width: 40%"><?= glyph("file", "Filename") ?></th>
+                    <th style="width: 1%"><?= glyph("comment", "Comments") ?></th>
+                    <th style="width: 1%"><?= glyph("thumbs-up", "Likes") ?></th>
+                    <th style="width: 5%"></th>
+                    <th style="width: 1%"><?= glyph("download", "Download") ?></th>
+                    <th style="width: 1%"><?= glyph("magnet", "Magnet") ?></th>
+                    <th style="width: 1%"><?= glyph("hard-drive", "Filesize") ?></th>
+                    <th style="width: 5%"></th>
+                    <th style="width: 10%"><?= glyph("clock", "Added") ?></th>
+                    <th style="width: 1%"><?= glyph("arrow-right-arrow-left", "Peers") ?></th>
+                </tr>
+            </thead>
+            <?php if(mysqli_num_rows($torrents)!=0) { ?>
+            <tbody>
+                <tr>
+                    <td></td>
+                </tr>
+            </tbody>
+            <?php } ?>
+        </table>
+        <?php if(mysqli_num_rows($torrents)==0) { ?>
+        <div class="alert alert-warning text-center" role="alert"><strong><?= glyph("triangle-exclamation", "Error", "fade") ?></strong> User has no Torrents</div>
+        <?php } ?>
     </div>
 </div>
 
