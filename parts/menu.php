@@ -33,8 +33,8 @@
                             <ul class="dropdown-menu">
                                 <li <?php if($page=="my-profile") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>profile.php?name=<?= $user["username"] ?>"><?= glyph("id-card", "My Profile") ?> My Profile</a></li>
                                 <li <?php if($page=="account") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>account.php?tab=settings"><?= glyph("user-gear", "Account") ?> Account</a></li>
-                                <li <?php if($page=="my-torrents") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>account.php?tab=torrents.php"><?= glyph("paste", "My Torrents") ?> My Torrents</a></li>
-                                <li <?php if($page=="my-invites") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>account.php?tab=invites"><?= glyph("code-fork", "My Invites") ?> My Invites</a></li>
+                                <li <?php if($page=="my-torrents") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>account.php?tab=my-torrents"><?= glyph("paste", "My Torrents") ?> My Torrents</a></li>
+                                <li <?php if($page=="my-invites") echo 'class="active"'; ?>><a href="<?= $config["url"] ?>account.php?tab=my-invites"><?= glyph("code-fork", "My Invites") ?> My Invites</a></li>
                                 <li <?php if($page=="logout") echo 'class="active"'; ?>><a href="?logout"><?= glyph("arrow-right-from-bracket", "Logout") ?> Logout</a></li>
                             </ul>
                         </li>

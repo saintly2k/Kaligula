@@ -20,6 +20,7 @@ if(!defined('__DB_TABLE')) { define('__DB_TABLE', 'peers'); }
 require("core/conn.php");
 require("core/funky.php");
 require("core/account.php");
+require("core/arrays.php");
 
 if($loggedin==true) {
     if($user["banned"]==true && !isset($_SESSION["ya"])) {
